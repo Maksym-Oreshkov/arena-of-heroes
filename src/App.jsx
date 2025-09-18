@@ -52,27 +52,30 @@ const DEATH_FALL_SEC = 0.4; // time to fall over
 const DEATH_FADE_SEC = 0.4; // time to dissolve after falling
 const DEATH_REMOVE_MS = Math.round((DEATH_FALL_SEC + DEATH_FADE_SEC) * 1000);
 
-// Example models (replace with your own URLs or public assets)
-const PLAYER_KNIGHT = "/models/knight.glb";
-const PLAYER_ARCHER = "/models/archer.glb";
-const PLAYER_MAGE = "/models/mage.glb";
-const PLAYER_RIDER = "/models/rider.glb";
+// Example models (public/*) — make paths relative to BASE_URL for Electron file://
+const BASE = import.meta.env.BASE_URL || './'
+const PLAYER_HERO = `${BASE}models/angel.glb`; // main player model
+const PLAYER_KNIGHT = `${BASE}models/knight.glb`;
+const PLAYER_ARCHER = `${BASE}models/archer.glb`;
+const PLAYER_MAGE = `${BASE}models/mage.glb`;
+const PLAYER_RIDER = `${BASE}models/rider.glb`;
 
-const ENEMY_ASSASSIN = "/models/assassin.glb";
-const ENEMY_DEVIL = "/models/devil.glb";
-const ENEMY_SKUL = "/models/skul.glb";
+const ENEMY_DARK_KING = `${BASE}models/devil-king.glb`;
+const ENEMY_ASSASSIN = `${BASE}models/assassin.glb`;
+const ENEMY_DEVIL = `${BASE}models/devil.glb`;
+const ENEMY_SKUL = `${BASE}models/skul.glb`;
 
 // Main soundtrack (place your file in /public/audio)
-const MUSIC_URL = "/audio/battle.mp3";
+const MUSIC_URL = `${BASE}audio/battle.mp3`;
 
 // Sound effects (place your files in /public/audio)
-const SFX_HIT = "/audio/hit.mp3";
-const SFX_HEAL = "/audio/heal.mp3";
-const SFX_MOVE = "/audio/move.mp3";
-const SFX_FALL = "/audio/fall.mp3";
-const SFX_VICTORY = "/audio/victory.mp3";
-const SFX_FAIL = "/audio/fail.mp3";
-const SFX_TURN = "/audio/turn.mp3";
+const SFX_HIT = `${BASE}audio/hit.mp3`;
+const SFX_HEAL = `${BASE}audio/heal.mp3`;
+const SFX_MOVE = `${BASE}audio/move.mp3`;
+const SFX_FALL = `${BASE}audio/fall.mp3`;
+const SFX_VICTORY = `${BASE}audio/victory.mp3`;
+const SFX_FAIL = `${BASE}audio/fail.mp3`;
+const SFX_TURN = `${BASE}audio/turn.mp3`;
 
 // Utility helpers
 const key = (x, y) => `${x},${y}`;
@@ -572,11 +575,24 @@ const initialUnits = () => {
   // Two simple squads
   const players = [
     {
+      id: "hero",
+      team: "player",
+      classType: "melee",
+      x: 0,
+      y: 4,
+      hp: 20,
+      maxHp: 20,
+      atk: 10,
+      move: 1,
+      modelUrl: PLAYER_HERO,
+      hasActed: false,
+    },
+    {
       id: "knight",
       team: "player",
       classType: "melee",
       x: 1,
-      y: 2,
+      y: 5,
       hp: 10,
       maxHp: 10,
       atk: 4,
@@ -588,7 +604,7 @@ const initialUnits = () => {
       id: "rider",
       team: "player",
       classType: "melee",
-      x: 2,
+      x: 1,
       y: 3,
       hp: 10,
       maxHp: 10,
@@ -601,12 +617,12 @@ const initialUnits = () => {
       id: "mage",
       team: "player",
       classType: "ranged",
-      x: 1,
-      y: 4,
+      x: 0,
+      y: 2,
       hp: 10,
       maxHp: 10,
       atk: 4,
-      move: 1,
+      move: 2,
       attackRange: 8,
       modelUrl: PLAYER_MAGE,
       hasActed: false,
@@ -615,7 +631,7 @@ const initialUnits = () => {
       id: "archer",
       team: "player",
       classType: "ranged",
-      x: 1,
+      x: 0,
       y: 6,
       hp: 10,
       maxHp: 10,
@@ -627,6 +643,19 @@ const initialUnits = () => {
     },
   ];
   const enemies = [
+    {
+      id: "e0",
+      team: "enemy",
+      classType: "melee",
+      x: GRID_COLS - 1,
+      y: 3,
+      hp: 20,
+      maxHp: 20,
+      atk: 10,
+      move: 1,
+      modelUrl: ENEMY_DARK_KING,
+      hasActed: false,
+    },
     {
       id: "e1",
       team: "enemy",
@@ -657,7 +686,7 @@ const initialUnits = () => {
       id: "e3",
       team: "enemy",
       classType: "ranged",
-      x: GRID_COLS - 3,
+      x: GRID_COLS - 1,
       y: 5,
       hp: 15,
       maxHp: 15,

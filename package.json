@@ -1,14 +1,47 @@
 {
-  "name": "my-arena-game",
+  "name": "heroes-of-arena",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.1.0",
+  "description": "Arena tactics game",
   "type": "module",
+  "main": "electron/main.js",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "electron:dev": "NODE_ENV=development electron .",
+    "electron:preview": "npm run build && NODE_ENV=production electron .",
+    "dist:mac": "npm run build && PATH=\"$PWD/scripts:$PATH\" CSC_IDENTITY_AUTO=false electron-builder --mac dmg",
+    "icon:mac": "bash scripts/make-icns.sh"
   },
+  "build": {
+    "appId": "com.myarena.game",
+    "productName": "Heroes of Arena",
+    "asar": true,
+    "files": [
+      "electron/**",
+      "dist/**",
+      "package.json",
+      "!**/node_modules/**"
+    ],
+    "npmRebuild": false,
+    "extraMetadata": {
+      "dependencies": {}
+    },
+    "mac": {
+      "target": [
+        "dmg"
+      ],
+      "category": "public.app-category.games",
+      "identity": null,
+      "icon": "build/icon.icns"
+    },
+    "dmg": {
+      "artifactName": "${productName}-${version}-mac.${ext}"
+    }
+  },
+  "author": "",
   "dependencies": {
     "@react-three/drei": "^10.6.1",
     "@react-three/fiber": "^9.3.0",
@@ -25,6 +58,8 @@
     "@types/react-dom": "^19.1.7",
     "@vitejs/plugin-react": "^4.7.0",
     "autoprefixer": "^10.4.21",
+    "electron": "^38.1.2",
+    "electron-builder": "^26.0.12",
     "eslint": "^9.32.0",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.20",
